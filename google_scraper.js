@@ -104,17 +104,16 @@ class GoogleScraper extends BrowserWorker {
 
         let serp_obj = {
           rank: index + 1,
-          link: _attr(el, '.r a', 'href'),
-          title: _text(el, '.r a h3'),
-          snippet: _text(el, 'span.st'),
-          visible_link: _text(el, '.r cite'),
-          date: _text(el, 'span.f'),
+          link: el.getElementsByTagName('a')[0].href,
+          title: el.getElementsByTagName('h3')[0].innerText,
+          visible_link: el.querySelector('.rc').querySelector('cite').innerText
         };
-
-        if (serp_obj.date) {
-          serp_obj.date = serp_obj.date.replace(' - ', '');
-        }
-
+        let snippet_ele = el.querySelector('span.aCOpRe')
+        if(snippet_ele){
+          serp_obj.snippet = snippet_ele.innerText
+          let date_ele = el.querySelector('span.f')
+          if(date_ele) serp_obj.date = date_ele.innerText
+      }
         results.results.push(serp_obj);
       });
 
